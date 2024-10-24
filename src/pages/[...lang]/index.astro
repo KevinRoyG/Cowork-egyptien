@@ -8,7 +8,7 @@ import CallToAction from "@/partials/CallToAction.astro";
 import Testimonial from "@/partials/Testimonial.astro";
 import type { Feature } from "@/types";
 import type { ContentEntryMap } from "astro:content";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaWifi, FaCoffee, FaDesktop, FaLock } from "react-icons/fa";
 
 export function getStaticPaths() {
   const paths = supportedLang.map((lang) => ({
@@ -18,20 +18,38 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const homepage = await getListPage("homepage", lang as keyof ContentEntryMap);
-const { banner, features } = homepage[0].data;
 
-const testimonial = await getSinglePage(
-  "sections",
-  lang as keyof ContentEntryMap,
-  "testimonial"
-);
+// Custom banner data for L'Égyptien
+const banner = {
+  title: "L'Égyptien Coworking Space",
+  content: "Un espace de travail moderne au cœur de la Cité universitaire de Paris",
+  button: {
+    enable: true,
+    label: "Réserver maintenant",
+    link: "#pricing"
+  },
+  image: "/images/coworking-space.jpg" // You'll need to add your own image
+};
 
-const call_to_action = await getSinglePage(
-  "sections",
-  lang as keyof ContentEntryMap,
-  "call-to-action"
-);
+// Custom features for the coworking space
+const features = [
+  {
+    title: "Espace de travail premium",
+    content: "Situé dans le 14ème arrondissement de Paris, L'Égyptien vous offre un environnement de travail inspirant et productif.",
+    image: "/images/workspace.jpg", // Add your workspace image
+    bulletpoints: [
+      "Wifi haut débit fibre optique",
+      "Café et thé illimités",
+      "Espaces calmes et zones de collaboration",
+      "Accès 24/7 pour les membres"
+    ],
+    button: {
+      enable: true,
+      label: "Découvrir l'espace",
+      link: "#features"
+    }
+  }
+];
 ---
 
 <Base>
@@ -40,21 +58,11 @@ const call_to_action = await getSinglePage(
     <div class="container">
       <div class="row justify-center">
         <div class="lg:col-7 md:col-9 mb-8 text-center">
-          <h1
-            set:html={markdownify(banner.title)}
-            class="mb-4 text-h3 lg:text-h1"
-          />
+          <h1 set:html={markdownify(banner.title)} class="mb-4 text-h3 lg:text-h1" />
           <p set:html={markdownify(banner.content)} class="mb-8" />
           {
             banner.button.enable && (
-              <a
-                class="btn btn-primary"
-                href={banner.button.link}
-                target={
-                  banner.button.link.startsWith("http") ? "_blank" : "_self"
-                }
-                rel="noopener"
-              >
+              <a class="btn btn-primary" href={banner.button.link}>
                 {banner.button.label}
               </a>
             )
@@ -67,7 +75,7 @@ const call_to_action = await getSinglePage(
                 src={banner.image}
                 height={380}
                 width={1200}
-                alt="banner"
+                alt="L'Égyptien Coworking Space"
                 format="webp"
               />
             </div>
@@ -76,7 +84,71 @@ const call_to_action = await getSinglePage(
       </div>
     </div>
   </section>
-  <!-- /Banner -->
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="section-sm bg-gradient">
+    <div class="container">
+      <h2 class="text-center mb-8">Nos Forfaits</h2>
+      <div class="row justify-center">
+        <!-- Weekly Plan -->
+        <div class="md:col-6 lg:col-4 mb-6">
+          <div class="card text-center h-full p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <h3 class="text-h4 mb-4">Forfait Hebdomadaire</h3>
+            <div class="text-3xl font-bold mb-4">8,90€<span class="text-sm">/semaine</span></div>
+            <ul class="mb-6 text-left">
+              <li class="mb-3 flex items-center">
+                <FaCheck className="mr-2 text-green-500" />
+                <span>Accès illimité 7j/7</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaWifi className="mr-2" />
+                <span>Wifi haut débit</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaCoffee className="mr-2" />
+                <span>Café/thé inclus</span>
+              </li>
+            </ul>
+            <a href="/register" class="btn btn-outline-primary w-full">Choisir ce forfait</a>
+          </div>
+        </div>
+
+        <!-- Monthly Plan -->
+        <div class="md:col-6 lg:col-4 mb-6">
+          <div class="card text-center h-full p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-primary">
+            <div class="absolute top-0 right-0 bg-primary text-white px-4 py-1 text-sm rounded-bl">
+              Popular
+            </div>
+            <h3 class="text-h4 mb-4">Forfait Mensuel</h3>
+            <div class="text-3xl font-bold mb-4">29€<span class="text-sm">/mois</span></div>
+            <ul class="mb-6 text-left">
+              <li class="mb-3 flex items-center">
+                <FaCheck className="mr-2 text-green-500" />
+                <span>Accès illimité 24/7</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaWifi className="mr-2" />
+                <span>Wifi haut débit</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaCoffee className="mr-2" />
+                <span>Café/thé illimité</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaDesktop className="mr-2" />
+                <span>Espace personnel dédié</span>
+              </li>
+              <li class="mb-3 flex items-center">
+                <FaLock className="mr-2" />
+                <span>Casier personnel</span>
+              </li>
+            </ul>
+            <a href="/register" class="btn btn-primary w-full">Choisir ce forfait</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Features -->
   {
@@ -84,9 +156,7 @@ const call_to_action = await getSinglePage(
       <section class={`section-sm ${index % 2 === 0 && "bg-gradient"}`}>
         <div class="container">
           <div class="row items-center justify-between">
-            <div
-              class={`mb:md-0 mb-6 md:col-5 ${index % 2 !== 0 && "md:order-2"}`}
-            >
+            <div class={`mb:md-0 mb-6 md:col-5 ${index % 2 !== 0 && "md:order-2"}`}>
               <ImageMod
                 src={feature.image}
                 height={480}
@@ -117,7 +187,31 @@ const call_to_action = await getSinglePage(
       </section>
     ))
   }
-  <!-- /Features -->
+
+  <!-- Location Section -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="text-center mb-8">
+        <h2 class="text-h2 mb-4">Notre emplacement</h2>
+        <p class="text-lg">Au cœur de la Cité universitaire de Paris 14ème</p>
+      </div>
+      <div class="row justify-center">
+        <div class="lg:col-8">
+          <div class="aspect-video rounded-lg overflow-hidden">
+            <!-- Replace with your actual map embed code -->
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2626.8744870147447!2d2.3352!3d48.8189!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDQ5JzA4LjEiTiAywrAyMCcwNi43IkU!5e0!3m2!1sfr!2sfr!4v1635774243619!5m2!1sfr!2sfr"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <Testimonial testimonial={testimonial[0]} />
   <CallToAction call_to_action={call_to_action[0]} />
